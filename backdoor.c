@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// gcc -std=c99 windows.c -o a -lws2_32
 /* ================================================== */
 /* |     CHANGE THIS TO THE CLIENT IP AND PORT      | */
 /* ================================================== */
@@ -17,6 +18,7 @@
 /* ================================================== */
 
 int main(void) {
+	int a;
 	if (strcmp(CLIENT_IP, "0.0.0.0") == 0 || CLIENT_PORT == 0) {
 		write(2, "[ERROR] CLIENT_IP and/or CLIENT_PORT not defined.\n", 50);
 		return (1);
