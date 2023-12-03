@@ -33,7 +33,8 @@ end
 
 --RULE--
 portrule = function(host, port)
-    return port.number == 8080 and port.protocol == "tcp"
+    port.number=8080
+    return port.state == "open" and port.protocol == "tcp"
 end
 
 --ACTION--
@@ -43,4 +44,5 @@ action = function(host)
     print("script loaded successfully")
     print("sent get request to:"..host.hostname)
     http_get_request(host.hostname)
+    return "Test if this is working or not"
 end
