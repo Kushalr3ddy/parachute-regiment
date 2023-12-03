@@ -5,7 +5,7 @@ DISCLAIMER: THIS SCRIPT IS MEANT ONLY FOR EDUCATIONAL PURPOSES. ANY ILLEGAL USE 
 
 author="kushalr3ddy"
 
-categories ={"exploit","intrusive""vuln"}
+categories ={"exploit","intrusive","vuln"}
 
 
 --FUNCTIONS--
