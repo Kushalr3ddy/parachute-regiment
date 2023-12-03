@@ -1,5 +1,13 @@
 
 --HEAD--
+local _G = require "_G"
+local http = require "http"
+local nmap = require "nmap"
+local shortport = require "shortport"
+local stdnse = require "stdnse"
+local string = require "string"
+local table = require "table"
+
 description =[[a poc exploit for the BIRT vulnerability CVE-2021-34427
 DISCLAIMER: THIS SCRIPT IS MEANT ONLY FOR EDUCATIONAL PURPOSES. ANY ILLEGAL USE IS PROHIBITED]]
 
