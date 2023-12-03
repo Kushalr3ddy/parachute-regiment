@@ -42,7 +42,7 @@ end
 action = function(host)
     -- Perform the http_get_request function with the target host
     print("script loaded successfully")
-    print("sent get request to:"..host)--.hostname)
-    http_get_request(host)--.hostname)
+    --print("sent get request to:"..host.hostname)
+    http_get_request(host.hostname)
     return "Test if this is working or not"
 end
