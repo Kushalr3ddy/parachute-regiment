@@ -5,7 +5,7 @@ DISCLAIMER: THIS SCRIPT IS MEANT ONLY FOR EDUCATIONAL PURPOSES. ANY ILLEGAL USE 
 
 author="kushalr3ddy"
 
-categories ={"exploit","intrusive"}
+categories ={"exploit","intrusive""vuln"}
 
 
 --FUNCTIONS--
@@ -33,5 +33,6 @@ end
 action = function(host)
     -- Perform the http_get_request function with the target host
     print("script loaded successfully")
+    print("sent get request to:"..host.hostname)
     http_get_request(host.hostname)
 end
