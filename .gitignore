@@ -3,3 +3,4 @@ test.jsp
 *.exe
 push-file.bat
 test.nse
+birt-rce.nse
