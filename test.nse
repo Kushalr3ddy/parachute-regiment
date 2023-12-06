@@ -6,3 +6,4 @@ local http = require "http"
 
 action = function(host)
     print("host is:"..host.name)
+end
