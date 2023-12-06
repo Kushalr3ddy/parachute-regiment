@@ -17,17 +17,17 @@ categories ={"exploit","intrusive","vuln"}
 
 
 --FUNCTIONS--
-local function http_get_request(host)
+local function http_get_request(url)
     -- Use the http library to send an HTTP GET request
-    local response = http.get(host)
+    local response = http.get(url)
     
     -- Check if the request was successful
     if response and response.status == 200 then
         -- Print the HTTP response body
-        print("HTTP GET request to " .. host .. " successful. Response:")
+        print("HTTP GET request to " .. url .. " successful. Response:")
         print(response.body)
     else
-        print("HTTP GET request to " .. host .. " failed")
+        print("HTTP GET request to " .. url .. " failed")
     end
 end
 
