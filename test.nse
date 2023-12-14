@@ -7,7 +7,7 @@ end
 action = function(host)
     local url = "http://" .. host.ip .. "/"
     
-    local response = http.get(host.ip,host.port,path)
+    local response = http.get(host.ip,host.port)
 
     if response and response.status == 200 then
         print("HTTP GET request to " .. url .. " successful.")
